@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,4 +11,4 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         GameDataScript.LoadLevelDataFromJson();
     }
-}
+}*/
