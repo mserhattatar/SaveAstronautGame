@@ -1,15 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 { 
-    public bool moveAstronaut;
+    private bool _moveCamera;
+    public float forwardSpeed;
+
+    private void Start()
+    {
+        CanvasManager.GameStartDelegate += MoveCameraSetActive;
+        CanvasManager.GameOverDelegate += MoveCameraSetPassive;
+        CanvasManager.GameResetDelegate += MoveCameraSetPassive;
+    }
+
     private void FixedUpdate()
     {
-        if (moveAstronaut)
+        if (_moveCamera)
         {
-            transform.position += Vector3.up * Time.deltaTime;
+            transform.position += Vector3.up * (forwardSpeed * Time.deltaTime);
         }
+    }
+
+    private void MoveCameraSetActive()
+    {
+        _moveCamera = true;
+    }
+    private void MoveCameraSetPassive()
+    {
+        _moveCamera = false;
     }
 }

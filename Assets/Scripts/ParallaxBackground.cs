@@ -3,17 +3,16 @@ using UnityEngine;
 public class ParallaxBackground : MonoBehaviour
 {
     private float startPosition, length, temp, dist;
-    private GameObject myCamera;
+    public Transform myCamera;
     public float parallaxSpeed;
-    
+
 
     private void Start()
     {
-        SetCamera();
         SetBackgroundPosition();
         GetBackgroundValues();
     }
-    //TODO: Refactor use callupdate in inGameState 
+
     public void Update()
     {
         TriggerParallaxEffect();
@@ -23,11 +22,6 @@ public class ParallaxBackground : MonoBehaviour
     {
         startPosition = transform.position.y;
         length = GetComponent<SpriteRenderer>().bounds.size.y;
-    }
-
-    private void SetCamera()
-    {
-        myCamera = Camera.main.gameObject;
     }
 
     private void SetBackgroundPosition()

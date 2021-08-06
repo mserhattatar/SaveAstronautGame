@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -6,111 +5,134 @@ using UnityEngine;
 
 public class CanvasManager : MonoBehaviour
 {
-    public static CanvasManager instance;
+    public delegate void CanvasDelegate();
 
-    [SerializeField] private GameObject gameEndPanel;
-    [SerializeField] private GameObject startPanel;
-    [SerializeField] private GameObject homePanel;
+    public static CanvasDelegate GameStartDelegate;
+    public static CanvasDelegate GameOverDelegate;
+    public static CanvasDelegate GameResetDelegate;
+    public static CanvasDelegate OxygenPercentDelegate;
 
-    [SerializeField] private TextMeshProUGUI gameEndScoreText;
-    [SerializeField] private TextMeshProUGUI startPanelBestScoreText;
-    [SerializeField] private TextMeshProUGUI levelScoreText;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private GameObject loadingPanel;
+    [SerializeField] private TextMeshProUGUI gameOverText;
+    [SerializeField] private TextMeshProUGUI levelRemainingDistanceMText;
+    [SerializeField] private GameObject levelRemainingDistanceText;
+    [SerializeField] private GameObject oxygenTankDamageText;
+    [SerializeField] private TextMeshProUGUI oxygenTankDamagePercentText;
     [SerializeField] private Transform astronautPlayer;
-    public int bestScore;
-
-    private void Awake()
-    {
-        instance = this;
-        //StudentCollisionController.TeacherCollisionDelegate += GameEndPanelScoreText;
-        //StudentCollisionController.TeacherCollisionDelegate += GameEndPanelSetPassive;
-        //StudentCollisionController.TeacherCollisionDelegate += GameEndPanelSetActive;
-        //StudentCollisionController.TeacherCollisionDelegate += LevelScoreMetreTextSetPassive;
-        GameManager.ResetLevelDelegate += GameEndPanelSetPassive;
-    }
+    private int _oxygenPercent;
 
     private void Start()
     {
-        HomePanelSetActive();
+        LoadingPanelSetActive();
+        SetOxygenPercent();
+        GameStartDelegate += GameEndPanelSetPassive;
+        GameStartDelegate += LevelRemainingDistanceTextSetActive;
+        GameStartDelegate += OxygenPercentTextSetActive;
+        GameStartDelegate += OxygenTankDamageTextSetActive;
+        GameOverDelegate += OxygenPercentTextSetPassive;
+        GameOverDelegate += LevelRemainingDistanceTextSetPassive;
+        GameOverDelegate += GameOverPanelSetActive;
+        GameResetDelegate += LoadingPanelSetActive;
+        GameResetDelegate += SetOxygenPercent;
+        GameResetDelegate += OxygenPercentTextSetPassive;
+        OxygenPercentDelegate += OxygenPercentUpdate;
+        OxygenPercentDelegate += OxygenTankDamageTextSetActive;
     }
 
     private void Update()
     {
         LevelScoreMetreText();
+        OxygenPercentText();
     }
 
-    private void HomePanelSetPassive()
+
+    private void LoadingPanelSetActive()
     {
-        homePanel.SetActive(false);
+        loadingPanel.SetActive(true);
+        StartCoroutine(LoadingPanelSetPassiveDelay());
     }
 
-    private void HomePanelSetActive()
-    {
-        homePanel.SetActive(true);
-        StartCoroutine(HomePanelSetPassiveDelay());
-    }
-
-    private IEnumerator HomePanelSetPassiveDelay()
+    private IEnumerator LoadingPanelSetPassiveDelay()
     {
         yield return new WaitForSeconds(1.3f);
-        HomePanelSetPassive();
-        StartPanelSetActive(true);
+        loadingPanel.SetActive(false);
     }
 
-    private void StartPanelSetActive(bool setActive)
+    private void GameOverPanelSetActive()
     {
-        startPanel.SetActive(setActive);
-        if (setActive)
-            StartPanelBestScore();
+        GameOverPanelScoreText();
+        gameOverPanel.SetActive(true);
     }
 
-    private void StartPanelBestScore()
+    private void GameOverPanelScoreText()
     {
-        startPanelBestScoreText.text = (bestScore + " M");
-    }
-
-    private void GameEndPanelSetActive()
-    {
-        gameEndPanel.SetActive(true);
-    }
-
-    private void GameEndPanelScoreText()
-    {
-        gameEndScoreText.text = "Score = " + (int) astronautPlayer.position.y / 2 + " meters";
-        UpdateBestScore();
+        gameOverText.text = "Remaining Distance = " + (100 - (int) astronautPlayer.position.y) + " Meters";
     }
 
     private void GameEndPanelSetPassive()
     {
-        gameEndPanel.SetActive(false);
+        gameOverPanel.SetActive(false);
     }
 
 
-    private void LevelScoreMetreTextSetActive()
+    private void LevelRemainingDistanceTextSetActive()
     {
-        levelScoreText.gameObject.SetActive(true);
+        levelRemainingDistanceMText.gameObject.SetActive(true);
     }
 
-    private void LevelScoreMetreTextSetPassive()
+    private void LevelRemainingDistanceTextSetPassive()
     {
-        levelScoreText.gameObject.SetActive(false);
+        levelRemainingDistanceMText.gameObject.SetActive(false);
     }
 
     private void LevelScoreMetreText()
     {
-        if (levelScoreText.gameObject.activeInHierarchy)
-            levelScoreText.text = (int) astronautPlayer.position.y / 2 + "M";
+        if (levelRemainingDistanceMText.gameObject.activeInHierarchy)
+            levelRemainingDistanceMText.text = (100 - (int) astronautPlayer.position.y).ToString();
     }
 
-    private void UpdateBestScore()
+    private void OxygenPercentTextSetActive()
     {
-        if (bestScore < (int) astronautPlayer.position.z / 2)
-            bestScore = (int) astronautPlayer.position.z / 2;
+        oxygenTankDamagePercentText.gameObject.SetActive(true);
     }
+
+    private void OxygenPercentTextSetPassive()
+    {
+        oxygenTankDamagePercentText.gameObject.SetActive(false);
+    }
+
+    private void OxygenPercentText()
+    {
+        oxygenTankDamagePercentText.text = "%"+ _oxygenPercent;
+    }
+
+    private void OxygenTankDamageTextSetActive()
+    {
+        oxygenTankDamageText.SetActive(true);
+        StartCoroutine(OxygenTankDamageTextSetPassive());
+    }
+
+    private IEnumerator OxygenTankDamageTextSetPassive()
+    {
+        yield return new WaitForSeconds(4f);
+        oxygenTankDamageText.SetActive(false);
+    }
+
+    private void OxygenPercentUpdate()
+    {
+        _oxygenPercent += 10;
+        OxygenPercentText();
+    }
+
+    private void SetOxygenPercent()
+    {
+        _oxygenPercent = 50;
+    }
+
 
     public void ResetLevelButton()
     {
-        GameManager.ResetLevelDelegate();
-        GameDataScript.SaveLevelDataAsJson();
-        HomePanelSetActive();
+        GameResetDelegate();
     }
 }
