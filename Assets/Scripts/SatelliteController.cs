@@ -3,18 +3,14 @@ using UnityEngine;
 public class SatelliteController : MonoBehaviour
 {
     private int _pointIndex;
+    public bool isActive;
     private readonly Vector3[] _allSatellitePoint = new Vector3[7];
+    [SerializeField] private float movementSpeed;
 
     private void Start()
     {
-        var pos = transform.position;
-        _allSatellitePoint[0] = pos + new Vector3(-2, 1, 0);
-        _allSatellitePoint[1] = pos + new Vector3(-1, 0, 0);
-        _allSatellitePoint[2] = pos + new Vector3(1, 0, 0);
-        _allSatellitePoint[3] = pos + new Vector3(2, 1, 0);
-        _allSatellitePoint[4] = pos + new Vector3(1, 2, 0);
-        _allSatellitePoint[5] = pos + new Vector3(0, 3, 0);
-        _allSatellitePoint[6] = pos + new Vector3(-1, 2, 0);
+        RandomPointPos();
+        isActive = true;
     }
 
     private void Update()
@@ -27,11 +23,29 @@ public class SatelliteController : MonoBehaviour
         }
 
         transform.position = Vector3.MoveTowards(transform.position, _allSatellitePoint[_pointIndex],
-            1f * Time.deltaTime);
+            movementSpeed * Time.deltaTime);
     }
 
+    private void RandomPointPos()
+    {
+        var pos = transform.position;
+        for (int i = 0; i < 7; i++)
+        {
+            var x = Random.Range(-2, 3);
+            var y = Random.Range(-1, 4);
+            _allSatellitePoint[i] = pos + new Vector3(x, y, 0);
+        }
+    }
+
+    public void SetActiveSatellite(float y)
+    {
+        gameObject.SetActive(true);
+        isActive = true;
+        transform.position = new Vector3(0, y, 0);
+    }
     public void SetPassiveSatellite()
     {
         gameObject.SetActive(false);
+        isActive = false;
     }
 }
