@@ -12,7 +12,7 @@ public class ObstacleObjectsManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (satelliteList.First(o => !o.isActive))
+        if (satelliteList.Count(o => !o.isActive) > 0)
             SatelliteSetActive();
         else
             SatelliteSetPassive();
@@ -25,7 +25,7 @@ public class ObstacleObjectsManager : MonoBehaviour
         var activeObstacleList = satelliteList.Where(o => o.isActive);
         foreach (var o in activeObstacleList)
         {
-            if (pPos > o.transform.position.y + 10f)
+            if (pPos > o.transform.position.y + 12f)
                 o.SetPassiveSatellite();
         }
     }
