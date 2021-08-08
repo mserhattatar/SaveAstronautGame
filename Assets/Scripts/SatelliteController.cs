@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SatelliteController : MonoBehaviour
 {
@@ -15,15 +17,16 @@ public class SatelliteController : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position == _allSatellitePoint[_pointIndex])
+        var t = transform.position;
+        var st = _allSatellitePoint[_pointIndex];
+        if(Math.Abs(t.x - st.x) < 0.5f && Math.Abs(t.y - st.y) <0.5f)
         {
             _pointIndex += 1;
             if (_pointIndex == _allSatellitePoint.Length)
                 _pointIndex = 0;
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, _allSatellitePoint[_pointIndex],
-            movementSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(t, st,movementSpeed * Time.deltaTime);
     }
 
     private void RandomPointPos()
@@ -42,6 +45,7 @@ public class SatelliteController : MonoBehaviour
         gameObject.SetActive(true);
         isActive = true;
         transform.position = new Vector3(0, y, 0);
+        RandomPointPos();
     }
     public void SetPassiveSatellite()
     {

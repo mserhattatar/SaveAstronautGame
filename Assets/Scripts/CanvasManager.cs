@@ -36,6 +36,7 @@ public class CanvasManager : MonoBehaviour
         GameResetDelegate += LoadingPanelSetActive;
         GameResetDelegate += SetOxygenPercent;
         GameResetDelegate += OxygenPercentTextSetPassive;
+        GameResetDelegate += GameEndPanelSetPassive;
         OxygenPercentDelegate += OxygenPercentUpdate;
         OxygenPercentDelegate += OxygenTankDamageTextSetActive;
     }
