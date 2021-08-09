@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
-{ 
+{
     private bool _moveCamera;
     public float forwardSpeed;
 
@@ -25,6 +25,7 @@ public class CameraManager : MonoBehaviour
     {
         _moveCamera = true;
     }
+
     private void MoveCameraSetPassive()
     {
         _moveCamera = false;

@@ -42,7 +42,7 @@ public class ObstacleObjectsManager : MonoBehaviour
 
     private void SatellitePosYUpdate()
     {
-        var extraY = Random.Range(4f, 8f);
+        var extraY = Random.Range(3f, 6f);
         _satellitePosY += extraY;
     }
 }
