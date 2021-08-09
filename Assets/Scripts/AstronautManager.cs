@@ -1,74 +1,23 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class AstronautManager : MonoBehaviour
 {
-    [SerializeField] private GameObject destroyParticleEffectRed;
-    [SerializeField] private GameObject destroyParticleEffectBlue;
-    private int _oxygenPercent;
-    private Vector3 _touchPosition;
     private Rigidbody2D _rb;
-    private Vector3 _direction;
-    private bool _isGameStart;
-    private bool _checkTouch;
-    private bool _isShieldActive;
-
+    private Vector3 _touchPosition, _direction;
+    private bool _isGameStart, _checkTouch;
     public new Camera camera;
 
     private void Start()
     {
         _checkTouch = true;
-        _oxygenPercent = 50;
         _rb = GetComponent<Rigidbody2D>();
         CanvasManager.GameResetDelegate += ResetGame;
         CanvasManager.GameOverDelegate += CheckTouchSetPassive;
-        ShieldController.ShieldActiveDelegate += ShieldActive;
-        ShieldController.ShieldPassiveDelegate += ShieldPassive;
     }
 
     private void Update()
     {
         AstronautMovement();
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Satellite"))
-        {
-            if (_isShieldActive)
-            {
-                StartCoroutine(DestroyParticleEffect(Instantiate(destroyParticleEffectBlue, other.transform.position,
-                    Quaternion.Euler(0, 0, 0))));
-                other.gameObject.GetComponent<SatelliteController>().SetPassiveSatellite();
-            }
-            else
-            {
-                if (_oxygenPercent == 0)
-                {
-                    CanvasManager.GameOverDelegate();
-                }
-
-                _oxygenPercent -= 10;
-                CanvasManager.OxygenPercentIncreaseDelegate();
-                StartCoroutine(DestroyParticleEffect(Instantiate(destroyParticleEffectRed, other.transform.position,
-                    Quaternion.Euler(0, 0, 0))));
-                other.gameObject.GetComponent<SatelliteController>().SetPassiveSatellite();
-            }
-        }
-
-        if (other.gameObject.CompareTag("OxygenTank"))
-        {
-            ShieldController.ShieldActiveDelegate();
-            other.gameObject.GetComponent<OxygenTankController>().OxygenTankMove();
-            CanvasManager.OxygenPercentReduceDelegate();
-        }
-    }
-
-    private IEnumerator DestroyParticleEffect(GameObject particleEffect)
-    {
-        yield return new WaitForSeconds(2f);
-        Destroy(particleEffect);
     }
 
     private void AstronautMovement()
@@ -90,6 +39,7 @@ public class AstronautManager : MonoBehaviour
             }
         }
 
+        //TODO: delete getmouse for android
         if (Input.GetMouseButton(1) && _checkTouch)
         {
             var mousePosition = Input.mousePosition;
@@ -109,21 +59,9 @@ public class AstronautManager : MonoBehaviour
         _checkTouch = false;
     }
 
-    private void ShieldActive()
-    {
-        _isShieldActive = true;
-    }
-
-    private void ShieldPassive()
-    {
-        _isShieldActive = false;
-    }
-
     private void ResetGame()
     {
         _checkTouch = true;
-        _oxygenPercent = 50;
         _isGameStart = false;
-        Debug.Log("resetgame");
     }
 }
