@@ -10,7 +10,8 @@ public class CanvasManager : MonoBehaviour
     public static CanvasDelegate GameStartDelegate;
     public static CanvasDelegate GameOverDelegate;
     public static CanvasDelegate GameResetDelegate;
-    public static CanvasDelegate OxygenPercentDelegate;
+    public static CanvasDelegate OxygenPercentIncreaseDelegate;
+    public static CanvasDelegate OxygenPercentReduceDelegate;
 
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject loadingPanel;
@@ -37,8 +38,10 @@ public class CanvasManager : MonoBehaviour
         GameResetDelegate += SetOxygenPercent;
         GameResetDelegate += OxygenPercentTextSetPassive;
         GameResetDelegate += GameEndPanelSetPassive;
-        OxygenPercentDelegate += OxygenPercentUpdate;
-        OxygenPercentDelegate += OxygenTankDamageTextSetActive;
+        OxygenPercentIncreaseDelegate += OxygenPercentIncrease;
+        OxygenPercentIncreaseDelegate += OxygenTankDamageTextSetActive;
+        OxygenPercentReduceDelegate += OxygenPercentReduce;
+        OxygenPercentReduceDelegate += OxygenTankDamageTextSetActive;
     }
 
     private void Update()
@@ -120,9 +123,14 @@ public class CanvasManager : MonoBehaviour
         oxygenTankDamageText.SetActive(false);
     }
 
-    private void OxygenPercentUpdate()
+    private void OxygenPercentIncrease()
     {
         _oxygenPercent += 10;
+        OxygenPercentText();
+    }
+    private void OxygenPercentReduce()
+    {
+        _oxygenPercent -= 10;
         OxygenPercentText();
     }
 
@@ -135,5 +143,6 @@ public class CanvasManager : MonoBehaviour
     public void ResetLevelButton()
     {
         GameResetDelegate();
+        Debug.Log("reset button");
     }
 }
