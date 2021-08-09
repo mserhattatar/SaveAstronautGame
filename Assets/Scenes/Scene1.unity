@@ -2004,6 +2004,7 @@ GameObject:
   - component: {fileID: 1495812706}
   - component: {fileID: 1495812703}
   - component: {fileID: 1495812702}
+  - component: {fileID: 1495812707}
   m_Layer: 0
   m_Name: Astronaut
   m_TagString: Untagged
@@ -2023,10 +2024,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4f07b791d62ed4eb5849a080a930cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyParticleEffectRed: {fileID: 7193445579970430316, guid: 5f8fe1f97ec47af419f1b991ff05d0cc,
-    type: 3}
-  destroyParticleEffectBlue: {fileID: 1329845292236604, guid: 9bba9cf244c53c5439505dfc96fdd11c,
-    type: 3}
   camera: {fileID: 2011530601}
 --- !u!60 &1495812703
 PolygonCollider2D:
@@ -2290,6 +2287,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1495812707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495812701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a4cabb8f33ed054b9e99a20f66ebc89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyParticleEffectRed: {fileID: 7193445579970430316, guid: 5f8fe1f97ec47af419f1b991ff05d0cc,
+    type: 3}
+  destroyParticleEffectBlue: {fileID: 1329845292236604, guid: 9bba9cf244c53c5439505dfc96fdd11c,
+    type: 3}
 --- !u!1 &1552175091
 GameObject:
   m_ObjectHideFlags: 0
