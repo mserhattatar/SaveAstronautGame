@@ -2,7 +2,7 @@
 
  I have developed the SaveAstronaut game in Unity with C# language. 
 
-I did not design the background.
+I used the background from a team project we made in google bootcamp. I did not design it myself but asked the permission to owners :)
 
 You are the astronaut in this game who needs to complete the target distance. But there are obstacles on your way. Every time you hit an obstacle your oxygen tank is damaged 10% more. You have to finish the distance before your oxygen tank explodes. There are also oxygen tanks on your way. If you hit them you have a protection against all obstacles.
 
